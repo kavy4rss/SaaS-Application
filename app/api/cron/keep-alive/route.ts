@@ -1,37 +1,26 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-// This route keeps the Neon serverless Postgres database "warm" to prevent cold starts
-// A GitHub action will routinely hit this endpoint every 4 minutes.
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
+    const authHeader = request.headers.get('authorization');
+    const cronSecret = process.env.CRON_SECRET;
+
+    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+        return new NextResponse('Unauthorized', { status: 401 });
+    }
+
     try {
-        const authHeader = request.headers.get('authorization');
-        const cronSecret = process.env.CRON_SECRET;
-
-        // Security Verification: Only allow requests bearing the exact CRON_SECRET token
-        if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
-            return NextResponse.json(
-                { error: 'Unauthorized. Invalid or missing CRON_SECRET.' },
-                { status: 401 }
-            );
-        }
-
-        // Ping the Database
-        const start = performance.now();
-        const count = await prisma.user.count();
-        const duration = performance.now() - start;
-
+        const userCount = await prisma.user.count();
         return NextResponse.json({
             success: true,
-            message: 'Database connection is warm.',
-            pingDurationMs: Math.round(duration),
-            activeUsers: count,
+            time: new Date().toISOString(),
+            userCount,
+            message: 'Database connection is warm.'
         });
-    } catch (error: any) {
-        console.error('Keep-Alive Ping Failed:', error);
-        return NextResponse.json(
-            { error: 'Failed to connect to database in Keep-Alive.' },
-            { status: 500 }
-        );
+    } catch (error) {
+        console.error('Error hitting database heartbeat:', error);
+        return new NextResponse('Internal Server Error', { status: 500 });
     }
 }

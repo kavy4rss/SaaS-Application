@@ -1,21 +1,16 @@
-name: Keep Neon Database Warm
+name: Keep Database Alive Heartbeat
 
 on:
   schedule:
-    # Runs every 4 minutes (Neon pauses inactive databases after 5 minutes)
+    # Run every 4 minutes to keep the Neon Postgres serverless database from sleeping
     - cron: '*/4 * * * *'
-  workflow_dispatch: # Allows manual triggering from GitHub UI
+  workflow_dispatch:
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Keep-Alive Endpoint
+      - name: Hit the Keep-Alive Endpoint
         run: |
-          curl -f -X GET \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
-            ${{ secrets.PRODUCTION_URL }}/api/cron/keep-alive
-        
-      - name: Report Status
-        if: always()
-        run: echo "Ping completed."
+          curl -f -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+          ${{ secrets.PRODUCTION_URL }}/api/cron/keep-alive
