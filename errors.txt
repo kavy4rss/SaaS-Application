@@ -1,0 +1,19 @@
+.next/types/validator.ts(180,31): error TS2344: Type 'typeof import("C:/Users/Amit Agarwal/OneDrive/Desktop/b_OolIihZdDjo-1772024939655/app/api/projects/[projectId]/messages/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/projects/[projectId]/messages">'.
+  Types of property 'GET' are incompatible.
+    Type '(req: NextRequest, { params }: { params: { projectId: string; }; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ messages: any; }>>' is not assignable to type '(request: NextRequest, context: { params: Promise<{ projectId: string; }>; }) => void | Response | Promise<void | Response>'.
+      Types of parameters '__1' and 'context' are incompatible.
+        Type '{ params: Promise<{ projectId: string; }>; }' is not assignable to type '{ params: { projectId: string; }; }'.
+          Types of property 'params' are incompatible.
+            Property 'projectId' is missing in type 'Promise<{ projectId: string; }>' but required in type '{ projectId: string; }'.
+app/actions/budget.ts(6,10): error TS2305: Module '"@prisma/client"' has no exported member 'BudgetItemStatus'.
+app/api/projects/[projectId]/messages/route.ts(42,55): error TS7006: Parameter 'msg' implicitly has an 'any' type.
+app/dashboard/project/[id]/page.tsx(92,52): error TS7006: Parameter 'sketch' implicitly has an 'any' type.
+app/dashboard/project/[id]/page.tsx(135,61): error TS7006: Parameter 'item' implicitly has an 'any' type.
+app/setup/page.tsx(14,13): error TS2339: Property 'currentUserId' does not exist on type 'AuthContextType'.
+app/setup/page.tsx(14,28): error TS2339: Property 'currentUser' does not exist on type 'AuthContextType'.
+components/layout/TopBar.tsx(9,11): error TS2339: Property 'isDesigner' does not exist on type 'AuthContextType'.
+components/layout/TopBar.tsx(9,23): error TS2339: Property 'setEditMode' does not exist on type 'AuthContextType'.
+components/layout/TopBar.tsx(9,36): error TS2339: Property 'isEditMode' does not exist on type 'AuthContextType'.
+components/layout/TopBar.tsx(9,48): error TS2339: Property 'currentProjectId' does not exist on type 'AuthContextType'.
+hooks/useChat.ts(64,13): error TS18047: 'pusherClient' is possibly 'null'.
+lib/prisma.ts(1,10): error TS2305: Module '"@prisma/client"' has no exported member 'PrismaClient'.
